@@ -1,11 +1,8 @@
 package unosquare.challenge.selenium;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -15,21 +12,22 @@ import java.util.List;
 
 public class SeleniumBase {
     private WebDriver driver;
+    private static SeleniumBase seleniumBase;
 
-    private SeleniumBase(String browserType) {
-        if (browserType.equalsIgnoreCase("chrome")) {
-            driver = new ChromeDriver();
-        }else if (browserType.equalsIgnoreCase("firefox")) {
-            driver = new FirefoxDriver();
+
+    public static SeleniumBase getSeleniumBase() {
+        if (seleniumBase == null) {
+            seleniumBase = new SeleniumBase();
         }
+        return seleniumBase;
     }
 
-    public static SeleniumBase getInstance(String browserType) {
-        return new SeleniumBase(browserType);
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 
     public WebDriver getDriver() {
-        return this.driver;
+        return driver;
     }
 
     public WebElement findElementBy(By by) {

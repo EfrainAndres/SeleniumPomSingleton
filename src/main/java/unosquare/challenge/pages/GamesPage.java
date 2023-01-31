@@ -1,20 +1,31 @@
 package unosquare.challenge.pages;
 
+import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Reporter;
 import unosquare.challenge.interfaces.IGamePage;
 import unosquare.challenge.selenium.SeleniumBase;
 import unosquare.challenge.utils.FunctionUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GamesPage implements IGamePage {
 
-    private final SeleniumBase seleniumBase;
+    private static GamesPage instance;
+    private final SeleniumBase seleniumPage;
 
-    public GamesPage(SeleniumBase seleniumBase) {
-        this.seleniumBase = seleniumBase;
+    private GamesPage() throws IOException, ParseException {
+        seleniumPage = SeleniumBase.getSeleniumBase();
+    }
+
+    public static GamesPage getInstance() throws IOException, ParseException {
+        if (instance == null) {
+            instance = new GamesPage();
+        }
+        return instance;
     }
 
     private String firstPrice;
@@ -29,37 +40,37 @@ public class GamesPage implements IGamePage {
     private final By buyGameButton = By.id("ButtonPanel_buttonPanel_OverflowMenuTrigger");
     private final By addToCart = By.id("buttonPanel_AddToCartButton");
     public void paginateFirstPage() {
-        seleniumBase.waitForElementToBeClickable(firstPage);
-        seleniumBase.click(firstPage);
+        seleniumPage.waitForElementToBeClickable(firstPage);
+        seleniumPage.click(firstPage);
     }
 
     public void clickButtonPriceFilter() {
-        seleniumBase.waitForElementToBeClickable(buttonPriceFilter);
-        seleniumBase.click(buttonPriceFilter);
+        seleniumPage.waitForElementToBeClickable(buttonPriceFilter);
+        seleniumPage.click(buttonPriceFilter);
     }
 
     public void clickPriceFilter() {
-        seleniumBase.waitForElementToBeClickable(priceFilter);
-        seleniumBase.click(priceFilter);
+        seleniumPage.waitForElementToBeClickable(priceFilter);
+        seleniumPage.click(priceFilter);
     }
 
     @Override
     public void countPrintElements(WebDriver driver) {
         for (int i = 1; i <= 3; i++) {
             By allGamesPage = By.xpath("//*[@id='shopDetailsWrapper']/div[1]/div[3]/div/ul/li/div");
-            List<WebElement> titlesList = seleniumBase.findElementsBy(allGamesPage);
+            List<WebElement> titlesList = seleniumPage.findElementsBy(allGamesPage);
             By detailsAllElements = By.id("shopDetailsWrapper");
 
-            seleniumBase.waitForElementToBePresent(detailsAllElements);
-            seleniumBase.waitForElementToBeClickable(By.xpath("//ul[@class='pagination']/li[" + i + "]"));
+            seleniumPage.waitForElementToBePresent(detailsAllElements);
+            seleniumPage.waitForElementToBeClickable(By.xpath("//ul[@class='pagination']/li[" + i + "]"));
             elementCount += titlesList.size();
             for (WebElement title : titlesList) {
                 System.out.println("Titles page " + i + ": " + title.getText());
             }
 
             if (i < 3) {
-                seleniumBase.waitForElementToBeClickable(nextPage);
-                seleniumBase.click(nextPage);
+                seleniumPage.waitForElementToBeClickable(nextPage);
+                seleniumPage.click(nextPage);
             }
         }
         System.out.println("Total elements: " + elementCount);
@@ -72,7 +83,7 @@ public class GamesPage implements IGamePage {
     public String getFirstNonFreePrice() {
         By allGamesPage = By.xpath("//*[@id='shopDetailsWrapper']/div[1]/div[3]/div/ul/li/div");
 
-        List<WebElement> titlesList = seleniumBase.findElementsBy(allGamesPage);
+        List<WebElement> titlesList = seleniumPage.findElementsBy(allGamesPage);
         for (WebElement price : titlesList) {
             if (!price.getText().contains("Save") & !price.getText().contains("Game Pass")) {
                 productID = price.getAttribute("id");
@@ -92,23 +103,23 @@ public class GamesPage implements IGamePage {
 
     @Override
     public void addFirstItemToCart(WebDriver driver) {
-        seleniumBase.waitForElementToBeClickable(By.id(productID));
+        seleniumPage.waitForElementToBeClickable(By.id(productID));
         clickProduct(driver,productID).click();
     }
 
     public void closeRegistrationPopUp() {
-        seleniumBase.waitForElementToBeClickable(popUpClose);
-        seleniumBase.click(popUpClose);
+        seleniumPage.waitForElementToBeClickable(popUpClose);
+        seleniumPage.click(popUpClose);
     }
 
     public void addToCart() {
-        seleniumBase.waitForElementToBeClickable(buyGameButton);
-        seleniumBase.click(buyGameButton);
-        seleniumBase.waitForElementToBeClickable(addToCart);
-        seleniumBase.click(addToCart);
+        seleniumPage.waitForElementToBeClickable(buyGameButton);
+        seleniumPage.click(buyGameButton);
+        seleniumPage.waitForElementToBeClickable(addToCart);
+        seleniumPage.click(addToCart);
     }
 
     public void assertValues() {
-        seleniumBase.assertTextIsEqual("$" + firstPrice, getCurrentPrice(), "Prices match");
+        seleniumPage.assertTextIsEqual("$" + firstPrice, getCurrentPrice(), "Prices match");
     }
 }

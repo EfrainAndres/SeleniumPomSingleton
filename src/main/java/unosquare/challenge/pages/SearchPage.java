@@ -1,13 +1,24 @@
 package unosquare.challenge.pages;
 
+import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import unosquare.challenge.selenium.SeleniumBase;
 
-public class SearchPage {
-    private final SeleniumBase seleniumBase;
+import java.io.IOException;
 
-    public SearchPage(SeleniumBase seleniumBase) {
-        this.seleniumBase = seleniumBase;
+public class SearchPage {
+    private static SearchPage instance;
+    private final SeleniumBase seleniumPage;
+
+    private SearchPage() throws IOException, ParseException {
+        seleniumPage = SeleniumBase.getSeleniumBase();
+    }
+
+    public static SearchPage getInstance() throws IOException, ParseException {
+        if (instance == null) {
+            instance = new SearchPage();
+        }
+        return instance;
     }
 
     private final By searchInput = By.id("cli_shellHeaderSearchInput");
@@ -16,18 +27,18 @@ public class SearchPage {
     private final By gamesButton = By.linkText("Games");
 
     public void search(String keyword) {
-        seleniumBase.sendKeys(searchInput, keyword);
-        seleniumBase.waitForElementToBeClickable(searchButton);
-        seleniumBase.click(searchButton);
+        seleniumPage.sendKeys(searchInput, keyword);
+        seleniumPage.waitForElementToBeClickable(searchButton);
+        seleniumPage.click(searchButton);
     }
 
     public void BuyButton() {
-        seleniumBase.waitForElementToBeClickable(buyButton);
-        seleniumBase.click(buyButton);
+        seleniumPage.waitForElementToBeClickable(buyButton);
+        seleniumPage.click(buyButton);
     }
 
     public void navigateToGames() {
-        seleniumBase.waitForElementToBeClickable(gamesButton);
-        seleniumBase.click(gamesButton);
+        seleniumPage.waitForElementToBeClickable(gamesButton);
+        seleniumPage.click(gamesButton);
     }
 }

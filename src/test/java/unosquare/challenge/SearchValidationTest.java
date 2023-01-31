@@ -13,11 +13,11 @@ public class SearchValidationTest extends BaseTest {
     private final JsonUtils jsonUtils = new JsonUtils();
     @Test
     public void searchValidationTest() throws IOException, ParseException {
-        HomePage homePage = new HomePage(seleniumBase);
-        WindowsPage windowsPage = new WindowsPage(seleniumBase);
-        SearchPage searchPage = new SearchPage(seleniumBase);
-        GamesPage gamesPage = new GamesPage(seleniumBase);
-        ShoppingCartPage shoppingCartPage = new ShoppingCartPage(seleniumBase);
+        HomePage homePage = HomePage.getInstance();
+        WindowsPage windowsPage = WindowsPage.getInstance();
+        SearchPage searchPage = SearchPage.getInstance();
+        GamesPage gamesPage = GamesPage.getInstance();
+        ShoppingCartPage shoppingCartPage = ShoppingCartPage.getInstance();
         JSONObject data = jsonUtils.parseJson();
 
         // 2. Go to Windows
@@ -34,14 +34,14 @@ public class SearchValidationTest extends BaseTest {
         searchPage.navigateToGames();
 
         // 6. Count the elements on the first 3 pages and print the sum of elements and all the titles
-        gamesPage.countPrintElements(seleniumBase.getDriver());
+        gamesPage.countPrintElements(driver);
         gamesPage.paginateFirstPage();
         gamesPage.clickButtonPriceFilter();
         gamesPage.clickPriceFilter();
 
         // 7. Go back to the first page and select the first NON-FREE option and STORE the price for later comparison
         String firstPrice = gamesPage.getFirstNonFreePrice();
-        gamesPage.addFirstItemToCart(seleniumBase.getDriver());
+        gamesPage.addFirstItemToCart(driver);
 
         // 8. If you see a "Registration" pop up, close it
         gamesPage.closeRegistrationPopUp();
