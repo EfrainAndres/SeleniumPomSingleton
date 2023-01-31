@@ -11,14 +11,13 @@ import java.io.IOException;
 
 public class SearchValidationTest extends BaseTest {
     private final JsonUtils jsonUtils = new JsonUtils();
-    SeleniumPage seleniumPage;
     @Test
-    public void searchValidationTest() throws IOException, ParseException, InterruptedException {
-        HomePage homePage = HomePage.getInstance();
-        WindowsPage windowsPage = WindowsPage.getInstance();
-        SearchPage searchPage = SearchPage.getInstance();
-        GamesPage gamesPage = GamesPage.getInstance();
-        ShoppingCartPage shoppingCartPage = ShoppingCartPage.getInstance();
+    public void searchValidationTest() throws IOException, ParseException {
+        HomePage homePage = new HomePage(seleniumBase);
+        WindowsPage windowsPage = new WindowsPage(seleniumBase);
+        SearchPage searchPage = new SearchPage(seleniumBase);
+        GamesPage gamesPage = new GamesPage(seleniumBase);
+        ShoppingCartPage shoppingCartPage = new ShoppingCartPage(seleniumBase);
         JSONObject data = jsonUtils.parseJson();
 
         // 2. Go to Windows
@@ -35,16 +34,14 @@ public class SearchValidationTest extends BaseTest {
         searchPage.navigateToGames();
 
         // 6. Count the elements on the first 3 pages and print the sum of elements and all the titles
-        gamesPage.countPrintElements(driver);
-
+        gamesPage.countPrintElements(seleniumBase.getDriver());
         gamesPage.paginateFirstPage();
-
         gamesPage.clickButtonPriceFilter();
         gamesPage.clickPriceFilter();
 
         // 7. Go back to the first page and select the first NON-FREE option and STORE the price for later comparison
         String firstPrice = gamesPage.getFirstNonFreePrice();
-        gamesPage.addFirstItemToCart(driver);
+        gamesPage.addFirstItemToCart(seleniumBase.getDriver());
 
         // 8. If you see a "Registration" pop up, close it
         gamesPage.closeRegistrationPopUp();
@@ -53,15 +50,12 @@ public class SearchValidationTest extends BaseTest {
         gamesPage.addToCart();
 
         // 10. In this page, you will see the price again, compare first price vs current prince and they should match
-        String currentPrice = gamesPage.getCurrentPrice();
-        seleniumPage.assertTextIsEqual("$" + firstPrice, currentPrice, "Prices match");
-
+        gamesPage.assertValues();
         // 11. Verify the app takes you to the Shopping Cart page and verify you have one element available
-
-        seleniumPage.assertNumberIsEqual(shoppingCartPage.getItemCount(), 1, "Correct number of items in the cart");
+        shoppingCartPage.assertItemAccount();
 
         // 12. Delete the item and verify you have 0 elements: "Tu carro está vacío" message should be present
         shoppingCartPage.deleteItem();
-        seleniumPage.assertTextIsEqual(shoppingCartPage.isEmptyMessageDisplayed(), "Your cart is empty.", "Your cart is empty.");
+        shoppingCartPage.assertDisplayMessage();
     }
 }

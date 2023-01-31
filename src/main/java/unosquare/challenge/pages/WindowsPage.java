@@ -1,29 +1,20 @@
 package unosquare.challenge.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
-import unosquare.challenge.base.BaseTest;
+import unosquare.challenge.selenium.SeleniumBase;
 
-public class WindowsPage extends BaseTest {
+public class WindowsPage {
 
-    private static WindowsPage instance;
-    private SeleniumPage seleniumPage;
+    private final SeleniumBase seleniumBase;
 
-    private WindowsPage() {
-        seleniumPage = SeleniumPage.getInstance();
-    }
-
-    public static WindowsPage getInstance() {
-        if (instance == null) {
-            instance = new WindowsPage();
-        }
-        return instance;
+    public WindowsPage(SeleniumBase seleniumBase) {
+        this.seleniumBase = seleniumBase;
     }
 
     private final By searchButton = By.id("search");
 
-    public void navigateToSearch() throws InterruptedException {
-        seleniumPage.waitForElementToBeClickable(searchButton);
-        seleniumPage.click(searchButton);
+    public void navigateToSearch() {
+        seleniumBase.waitForElementToBeClickable(searchButton);
+        seleniumBase.click(searchButton);
     }
 }

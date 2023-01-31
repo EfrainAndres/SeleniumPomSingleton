@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Test Suite">
+    <test name="SearchValidation">
+        <classes>
+            <class name="unosquare.challenge.SearchValidationTest"/>
+        </classes>
+    </test>
+    <test name="Dummy">
+        <classes>
+            <class name="unosquare.challenge.DummyTest"/>
+        </classes>
+    </test>
+</suite>
