@@ -10,10 +10,10 @@ import java.util.List;
 
 public class ShoppingCartPage {
     private static ShoppingCartPage instance;
-    private final SeleniumBase seleniumPage;
+    private SeleniumBase seleniumPage;
 
     private ShoppingCartPage() throws IOException, ParseException {
-        seleniumPage = SeleniumBase.getSeleniumBase();
+        seleniumPage = new SeleniumBase();
     }
 
     public static ShoppingCartPage getInstance() throws IOException, ParseException {

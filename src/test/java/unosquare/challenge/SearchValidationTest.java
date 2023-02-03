@@ -5,14 +5,17 @@ import org.json.simple.parser.ParseException;
 import org.testng.annotations.Test;
 import unosquare.challenge.base.BaseTest;
 import unosquare.challenge.pages.*;
+import unosquare.challenge.selenium.SeleniumBase;
 import unosquare.challenge.utils.JsonUtils;
 
 import java.io.IOException;
 
 public class SearchValidationTest extends BaseTest {
     private final JsonUtils jsonUtils = new JsonUtils();
+
     @Test
     public void searchValidationTest() throws IOException, ParseException {
+        SeleniumBase seleniumBase;
         HomePage homePage = HomePage.getInstance();
         WindowsPage windowsPage = WindowsPage.getInstance();
         SearchPage searchPage = SearchPage.getInstance();
@@ -34,14 +37,14 @@ public class SearchValidationTest extends BaseTest {
         searchPage.navigateToGames();
 
         // 6. Count the elements on the first 3 pages and print the sum of elements and all the titles
-        gamesPage.countPrintElements(driver);
+        gamesPage.countPrintElements();
         gamesPage.paginateFirstPage();
         gamesPage.clickButtonPriceFilter();
         gamesPage.clickPriceFilter();
 
         // 7. Go back to the first page and select the first NON-FREE option and STORE the price for later comparison
         String firstPrice = gamesPage.getFirstNonFreePrice();
-        gamesPage.addFirstItemToCart(driver);
+        gamesPage.addFirstItemToCart();
 
         // 8. If you see a "Registration" pop up, close it
         gamesPage.closeRegistrationPopUp();

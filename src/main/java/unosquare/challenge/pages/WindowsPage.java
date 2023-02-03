@@ -9,10 +9,10 @@ import java.io.IOException;
 public class WindowsPage {
 
     private static WindowsPage instance;
-    private final SeleniumBase seleniumPage;
+    private SeleniumBase seleniumPage;
 
     private WindowsPage() throws IOException, ParseException {
-        seleniumPage = SeleniumBase.getSeleniumBase();
+        seleniumPage = new SeleniumBase();
     }
 
     public static WindowsPage getInstance() throws IOException, ParseException {

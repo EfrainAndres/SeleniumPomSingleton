@@ -8,10 +8,11 @@ import java.io.IOException;
 
 public class HomePage {
     private static HomePage instance;
-    private final SeleniumBase selenium;
+
+    private SeleniumBase selenium;
 
     private HomePage() throws IOException, ParseException {
-        selenium = SeleniumBase.getSeleniumBase();
+        selenium = new SeleniumBase();
     }
 
     public static HomePage getInstance() throws IOException, ParseException {

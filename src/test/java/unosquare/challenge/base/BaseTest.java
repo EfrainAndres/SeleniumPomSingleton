@@ -5,7 +5,6 @@ import org.json.simple.parser.ParseException;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import unosquare.challenge.driver.WebDriverSingleton;
 import unosquare.challenge.selenium.SeleniumBase;
 import unosquare.challenge.utils.JsonUtils;
 
@@ -21,15 +20,13 @@ public class BaseTest {
         JSONObject data = jsonUtils.parseJson();
         String dataBrowser = (String) data.get("browser");
         String dataUrl = (String) data.get("url");
-        driver = WebDriverSingleton.getInstance(dataBrowser).getDriver();
-        selenium = SeleniumBase.getSeleniumBase();
-        selenium.setDriver(driver);
-        driver.manage().window().maximize();
-        driver.get(dataUrl);
+        selenium = SeleniumBase.getInstance();
+        selenium.getDriver().manage().window().maximize();
+        selenium.getDriver().get(dataUrl);
     }
 
     @AfterTest
     public void tearDown() {
-        driver.quit();
+        selenium.getDriver().quit();
     }
 }

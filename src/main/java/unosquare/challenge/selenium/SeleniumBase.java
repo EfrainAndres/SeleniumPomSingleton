@@ -1,29 +1,40 @@
 package unosquare.challenge.selenium;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import unosquare.challenge.utils.JsonUtils;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
 public class SeleniumBase {
-    private WebDriver driver;
-    private static SeleniumBase seleniumBase;
+    private static WebDriver driver;
+    private static SeleniumBase selenium;
 
-
-    public static SeleniumBase getSeleniumBase() {
-        if (seleniumBase == null) {
-            seleniumBase = new SeleniumBase();
+    public static SeleniumBase getInstance () throws IOException, ParseException {
+        JsonUtils jsonUtils = new JsonUtils();
+        JSONObject data = jsonUtils.parseJson();
+        String dataBrowser = (String) data.get("browser");
+        if (dataBrowser.equals("chrome")) {
+            selenium = new SeleniumBase();
+            driver = new ChromeDriver();
+        } else if (dataBrowser.equals("firefox")) {
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+            selenium = new SeleniumBase();
         }
-        return seleniumBase;
-    }
 
-    public void setDriver(WebDriver driver) {
-        this.driver = driver;
+        return selenium;
     }
 
     public WebDriver getDriver() {

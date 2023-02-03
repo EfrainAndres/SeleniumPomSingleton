@@ -18,7 +18,7 @@ public class GamesPage implements IGamePage {
     private final SeleniumBase seleniumPage;
 
     private GamesPage() throws IOException, ParseException {
-        seleniumPage = SeleniumBase.getSeleniumBase();
+        seleniumPage = new SeleniumBase();
     }
 
     public static GamesPage getInstance() throws IOException, ParseException {
@@ -55,7 +55,7 @@ public class GamesPage implements IGamePage {
     }
 
     @Override
-    public void countPrintElements(WebDriver driver) {
+    public void countPrintElements() {
         for (int i = 1; i <= 3; i++) {
             By allGamesPage = By.xpath("//*[@id='shopDetailsWrapper']/div[1]/div[3]/div/ul/li/div");
             List<WebElement> titlesList = seleniumPage.findElementsBy(allGamesPage);
@@ -76,8 +76,9 @@ public class GamesPage implements IGamePage {
         System.out.println("Total elements: " + elementCount);
     }
 
-    public WebElement clickProduct(WebDriver driver, String elementName) {
-        return driver.findElement(By.id(elementName));
+    public WebElement clickProduct(String elementName) {
+        seleniumPage.waitForElementToBeClickable(By.id(elementName));
+        return seleniumPage.findElementBy(By.id(elementName));
     }
 
     public String getFirstNonFreePrice() {
@@ -102,9 +103,9 @@ public class GamesPage implements IGamePage {
     }
 
     @Override
-    public void addFirstItemToCart(WebDriver driver) {
+    public void addFirstItemToCart() {
         seleniumPage.waitForElementToBeClickable(By.id(productID));
-        clickProduct(driver,productID).click();
+        clickProduct(productID).click();
     }
 
     public void closeRegistrationPopUp() {

@@ -8,10 +8,10 @@ import java.io.IOException;
 
 public class SearchPage {
     private static SearchPage instance;
-    private final SeleniumBase seleniumPage;
+    private SeleniumBase seleniumPage;
 
     private SearchPage() throws IOException, ParseException {
-        seleniumPage = SeleniumBase.getSeleniumBase();
+        seleniumPage = new SeleniumBase();
     }
 
     public static SearchPage getInstance() throws IOException, ParseException {
