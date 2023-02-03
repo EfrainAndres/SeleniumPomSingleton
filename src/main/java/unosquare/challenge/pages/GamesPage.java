@@ -1,31 +1,28 @@
 package unosquare.challenge.pages;
 
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Reporter;
 import unosquare.challenge.interfaces.IGamePage;
 import unosquare.challenge.selenium.SeleniumBase;
 import unosquare.challenge.utils.FunctionUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GamesPage implements IGamePage {
 
-    private static GamesPage instance;
+    private static GamesPage gamesPage;
     private final SeleniumBase seleniumPage;
 
-    private GamesPage() throws IOException, ParseException {
+    private GamesPage() {
         seleniumPage = new SeleniumBase();
     }
 
-    public static GamesPage getInstance() throws IOException, ParseException {
-        if (instance == null) {
-            instance = new GamesPage();
+    public static GamesPage getGamesPage() {
+        if (gamesPage == null) {
+            gamesPage = new GamesPage();
         }
-        return instance;
+        return gamesPage;
     }
 
     private String firstPrice;
@@ -36,9 +33,10 @@ public class GamesPage implements IGamePage {
     private final By nextPage = By.linkText("Next");
     private final By buttonPriceFilter = By.xpath("//button[normalize-space()='Price']");
     private final By priceFilter = By.xpath("//*[@id='mwfPrice']/div[2]/a[1]");
-    private final By popUpClose = By.cssSelector("#R1MarketRedirect-1 > button:nth-child(1)");
+    private final By popUpClose = By.xpath("//*[@id='R1MarketRedirect-close']");
     private final By buyGameButton = By.id("ButtonPanel_buttonPanel_OverflowMenuTrigger");
     private final By addToCart = By.id("buttonPanel_AddToCartButton");
+
     public void paginateFirstPage() {
         seleniumPage.waitForElementToBeClickable(firstPage);
         seleniumPage.click(firstPage);
@@ -65,7 +63,7 @@ public class GamesPage implements IGamePage {
             seleniumPage.waitForElementToBeClickable(By.xpath("//ul[@class='pagination']/li[" + i + "]"));
             elementCount += titlesList.size();
             for (WebElement title : titlesList) {
-                System.out.println("Titles page " + i + ": " + title.getText());
+                Reporter.log("Titles page " + i + ": " + title.getText());
             }
 
             if (i < 3) {
@@ -73,7 +71,7 @@ public class GamesPage implements IGamePage {
                 seleniumPage.click(nextPage);
             }
         }
-        System.out.println("Total elements: " + elementCount);
+        Reporter.log("Total elements: " + elementCount);
     }
 
     public WebElement clickProduct(String elementName) {
@@ -97,6 +95,7 @@ public class GamesPage implements IGamePage {
         }
         return firstPrice;
     }
+
     @Override
     public String getCurrentPrice() {
         return "$" + firstPrice;
@@ -109,11 +108,13 @@ public class GamesPage implements IGamePage {
     }
 
     public void closeRegistrationPopUp() {
+        seleniumPage.waitForElementToBePresent(popUpClose);
         seleniumPage.waitForElementToBeClickable(popUpClose);
         seleniumPage.click(popUpClose);
     }
 
     public void addToCart() {
+        seleniumPage.waitForElementToBePresent(buyGameButton);
         seleniumPage.waitForElementToBeClickable(buyGameButton);
         seleniumPage.click(buyGameButton);
         seleniumPage.waitForElementToBeClickable(addToCart);

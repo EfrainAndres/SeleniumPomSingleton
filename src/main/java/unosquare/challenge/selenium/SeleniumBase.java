@@ -1,19 +1,16 @@
 package unosquare.challenge.selenium;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import unosquare.challenge.utils.JsonUtils;
+import org.testng.Reporter;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
@@ -21,17 +18,24 @@ public class SeleniumBase {
     private static WebDriver driver;
     private static SeleniumBase selenium;
 
-    public static SeleniumBase getInstance () throws IOException, ParseException {
-        JsonUtils jsonUtils = new JsonUtils();
-        JSONObject data = jsonUtils.parseJson();
-        String dataBrowser = (String) data.get("browser");
-        if (dataBrowser.equals("chrome")) {
-            selenium = new SeleniumBase();
-            driver = new ChromeDriver();
-        } else if (dataBrowser.equals("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
-            selenium = new SeleniumBase();
+    public static SeleniumBase getInstance(String browser) {
+
+        switch (browser) {
+            case "chrome":
+                selenium = new SeleniumBase();
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                driver = new FirefoxDriver();
+                selenium = new SeleniumBase();
+                break;
+            case "edge":
+                driver = new EdgeDriver();
+                selenium = new SeleniumBase();
+                break;
+            default:
+                Reporter.log("Invalid browser type");
+                break;
         }
 
         return selenium;
@@ -71,12 +75,12 @@ public class SeleniumBase {
     }
 
     public void waitForElementToBeClickable(By element) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     public void waitForElementToBePresent(By element) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.presenceOfElementLocated(element));
     }
 

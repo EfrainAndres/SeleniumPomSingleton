@@ -1,27 +1,26 @@
 package unosquare.challenge.pages;
 
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import unosquare.challenge.selenium.SeleniumBase;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ShoppingCartPage {
-    private static ShoppingCartPage instance;
-    private SeleniumBase seleniumPage;
+    private static ShoppingCartPage shoppingCartPage;
+    private final SeleniumBase seleniumPage;
 
-    private ShoppingCartPage() throws IOException, ParseException {
+    private ShoppingCartPage() {
         seleniumPage = new SeleniumBase();
     }
 
-    public static ShoppingCartPage getInstance() throws IOException, ParseException {
-        if (instance == null) {
-            instance = new ShoppingCartPage();
+    public static ShoppingCartPage getShoppingCartPage() {
+        if (shoppingCartPage == null) {
+            shoppingCartPage = new ShoppingCartPage();
         }
-        return instance;
+        return shoppingCartPage;
     }
+
     private final By orderDelete = By.xpath("//*/text()[normalize-space(.)='Remove']/parent::*");
     private final By emptyCart = By.xpath("//*/text()[normalize-space(.)='Your cart is empty.']/parent::*");
 

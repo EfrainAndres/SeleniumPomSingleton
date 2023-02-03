@@ -1,26 +1,24 @@
 package unosquare.challenge.pages;
 
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import unosquare.challenge.selenium.SeleniumBase;
 
-import java.io.IOException;
-
 public class HomePage {
-    private static HomePage instance;
+    private static HomePage homePage;
 
-    private SeleniumBase selenium;
+    private final SeleniumBase selenium;
 
-    private HomePage() throws IOException, ParseException {
+    private HomePage() {
         selenium = new SeleniumBase();
     }
 
-    public static HomePage getInstance() throws IOException, ParseException {
-        if (instance == null) {
-            instance = new HomePage();
+    public static HomePage getHomePage() {
+        if (homePage == null) {
+            homePage = new HomePage();
         }
-        return instance;
+        return homePage;
     }
+
     private final By windowsButton = By.id("shellmenu_2");
 
     public void navigateToWindows() {

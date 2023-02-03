@@ -20,7 +20,7 @@ public class BaseTest {
         JSONObject data = jsonUtils.parseJson();
         String dataBrowser = (String) data.get("browser");
         String dataUrl = (String) data.get("url");
-        selenium = SeleniumBase.getInstance();
+        selenium = SeleniumBase.getInstance(dataBrowser);
         selenium.getDriver().manage().window().maximize();
         selenium.getDriver().get(dataUrl);
     }

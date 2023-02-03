@@ -1,24 +1,21 @@
 package unosquare.challenge.pages;
 
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import unosquare.challenge.selenium.SeleniumBase;
 
-import java.io.IOException;
-
 public class SearchPage {
-    private static SearchPage instance;
-    private SeleniumBase seleniumPage;
+    private static SearchPage searchPage;
+    private final SeleniumBase seleniumPage;
 
-    private SearchPage() throws IOException, ParseException {
+    private SearchPage() {
         seleniumPage = new SeleniumBase();
     }
 
-    public static SearchPage getInstance() throws IOException, ParseException {
-        if (instance == null) {
-            instance = new SearchPage();
+    public static SearchPage getSearchPage() {
+        if (searchPage == null) {
+            searchPage = new SearchPage();
         }
-        return instance;
+        return searchPage;
     }
 
     private final By searchInput = By.id("cli_shellHeaderSearchInput");

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class JsonUtils {
     JSONParser jsonParser = new JSONParser();
+
     public FileReader readJsonFile() throws FileNotFoundException {
         FileReader reader = new FileReader("src/main/resources/data.json");
         return reader;

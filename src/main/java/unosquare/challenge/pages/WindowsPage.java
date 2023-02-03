@@ -1,25 +1,22 @@
 package unosquare.challenge.pages;
 
-import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import unosquare.challenge.selenium.SeleniumBase;
 
-import java.io.IOException;
-
 public class WindowsPage {
 
-    private static WindowsPage instance;
-    private SeleniumBase seleniumPage;
+    private static WindowsPage windowsPage;
+    private final SeleniumBase seleniumPage;
 
-    private WindowsPage() throws IOException, ParseException {
+    private WindowsPage() {
         seleniumPage = new SeleniumBase();
     }
 
-    public static WindowsPage getInstance() throws IOException, ParseException {
-        if (instance == null) {
-            instance = new WindowsPage();
+    public static WindowsPage getWindowsPage() {
+        if (windowsPage == null) {
+            windowsPage = new WindowsPage();
         }
-        return instance;
+        return windowsPage;
     }
 
     private final By searchButton = By.id("search");
